@@ -1,3 +1,68 @@
+commit 6b6c3cfe9f57793bddc49aa4d63b078030a84b3b
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 16:39:39 2014 +0100
+
+    Updated branch/version to  for PerlModule/lib/QUANDICO.pm
+
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 8de016947df8e17a31174b6c2e42cf68f68e9356
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 16:39:21 2014 +0100
+
+    Minor changes to the documentation and READMEs
+
+ 3 files changed, 14 insertions(+), 14 deletions(-)
+
+commit bb19cb36e0208c7e547a90c786e97ad767910130
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 16:35:57 2014 +0100
+
+    Some corrections to the README
+
+ 1 files changed, 43 insertions(+), 38 deletions(-)
+
+commit 8bfdeea97d0533fc781d99186bbcc4f256dd81ac
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 16:03:33 2014 +0100
+
+    Added README.md with some basic introduction and installation
+    instructions
+
+ 1 files changed, 103 insertions(+), 0 deletions(-)
+
+commit 575b8d9e76a256b7b5a6d4d9d6589e1c92d06796
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 15:26:14 2014 +0100
+
+    Move constants block on top of export (for style only)
+
+ 1 files changed, 24 insertions(+), 12 deletions(-)
+
+commit 1f79b46c120887ff7ee00c101e7e4583e1cccba0
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 13:35:45 2014 +0100
+
+    Removed auto-generated files from MANIFEST
+
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+
+commit 7a463e4d288e121216ed8f8d8cb381dfd32bb51f
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 13:35:14 2014 +0100
+
+    Added documentation and changed links to point to GitHub.
+
+ 4 files changed, 226 insertions(+), 22 deletions(-)
+
+commit 0acecaaf722a5f0d47ea20fbdc147a1d3ce33c02
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 13:02:35 2014 +0100
+
+    Set master version to 1.12
+
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
 commit 7d3aede73aeef2018677de0dd2248228342f03b6
 Author: Frank Reinecke <frank.reinecke@qiagen.com>
 Date:   Mon Nov 17 13:00:44 2014 +0100
