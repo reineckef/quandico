@@ -1,3 +1,11 @@
+commit 7d3aede73aeef2018677de0dd2248228342f03b6
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 13:00:44 2014 +0100
+
+    Removed MYMETA files from repository, these are created during install
+
+ 3 files changed, 53 insertions(+), 104 deletions(-)
+
 commit cb5ff2e9c813dfc41d0c87b9ab7b9d9cb20c4502
 Author: Frank Reinecke <frank.reinecke@qiagen.com>
 Date:   Mon Nov 17 12:43:00 2014 +0100
