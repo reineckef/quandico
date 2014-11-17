@@ -587,7 +587,7 @@ Frank Reinecke, C<< <frank.reinecke at qiagen.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to C<frank.reinecke at qiagen.com>, 
-or through the website at L<https://github.com/fr02081975/quandico>. 
+or through the website at L<https://github.com/reineckef/quandico>. 
 
 
 =head1 SUPPORT
@@ -603,7 +603,7 @@ You can also look for information at:
 
 =item * GitHub (report bugs there)
 
-L<https://github.com/fr02081975/quandico>
+L<https://github.com/reineckef/quandico>
 
 
 =back

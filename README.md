@@ -104,5 +104,5 @@ library(quandico)
 
 ### Issues
 Please report bugs to the author [Frank Reinecke](mailto:frank.reinecke@qiagen.com) or file 
-them on quandico's home [on GitHub](http://github.com/fr02081975/quandico).
+them on quandico's home [on GitHub](http://github.com/reineckef/quandico).
 
