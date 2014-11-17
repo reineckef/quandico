@@ -1,0 +1,17 @@
+Package: quandico
+Title: Quantitative analysis of differences in copy number using read depth
+    obtained from PCR-enriched samples and controls
+Version: 1.12
+Date: 2014-10-30
+Author: Frank Reinecke
+Maintainer: Frank Reinecke <Frank.Reinecke@qiagen.com>
+Description: This package contains a function to assign copy number changes in
+    count data
+Depends:
+    MASS,
+    grid,
+    ggplot2,
+    gridExtra,
+    naturalsort,
+    scales
+License: GPL (>= 3)

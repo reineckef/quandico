@@ -1,0 +1,215 @@
+#!/usr/bin/perl -w
+use strict;
+use QUANDICO;
+use version 0.77;
+
+# Getopt::Long::Descriptive - input parameters
+my ( $opt, $usage ) = describe_options(
+	'%c %o <options>',
+	['
+  input file and global options:'
+	],
+	['sample|s=s%',    'sample details (hash: map or data, name, x, y)'],
+	['reference|r=s%', 'reference details (hash: map or data, name, x, y)'],
+	['assembly|a=s%', 'genome details (hash: data, version)', {default => {name => 'hg19', data => ''}}],
+	['global|g=s%',   'global options (title, see manual for more)'],
+	['
+  output files:'
+	],
+	['destdir|dir|d=s', 'destination directory',     {default => $CWD}],
+	['basename|b=s',    'basename for output files', {default => '<generate>'}],
+	['
+  count extraction parameters:'
+	],
+	[
+		'extract|e!',
+		'perform counting using <--counter> application. '
+		. 'This options requires hash-keys "map" for <--sample> and <--reference> to '
+		. 'point to a SAM/BAM file with mapped reads (e.g. "--sample map=SMPL.bam") [off]',
+		{default => 0}
+	],
+	['amplicons|A=s', 'BED file with amplicon coordinates for counting by <--counter>'],
+	['counter|N=s', 'script to run for read counting [qgetcounts]', {default => 'qgetcounts'}],
+	['ex|X=s%',     'hash with parameters for read counting (see manual of engine)'],
+	['
+  clustering parameters:'
+	],
+	['cluster|l!', 'perform clustering using <--engine>, say --no-cluster to switch off', {default => 1}],
+	['engine|E=s', 'script to run for clustering [qcluster]',                             {default => 'qcluster'}],
+	['cp|C=s%',    'hash with parameters for clustering (see manual of engine)'],
+	['
+  R specific:'
+	],
+	['rexe|x=s', 'R executable',                 {default => 'R'}],
+	['source=s', 'use current source (not package)', { default => undef }    ],
+	['inject=s', 'inject R code before quandico (used with "source")', {requires => 'source' }],
+	['
+  standard options:'
+	],
+	['verbose|v+', 'control verbosity (off)', {default => 0}],
+	['version|V',  "show the version ($QUANDICO::VERSION) and exit"],
+	['dump|D',     "dump all options and exit"],
+	['quiet|q', 'suppress all output except errors', {implies => {verbose => 0}}],
+	['help|h',  'show this help screen'],
+	['
+  
+# usage with demo data (included in the package)
+quandico -s data=M62_NA13019.tsv -s x=2 -s y=0 -r data=M62_NA12878.tsv -r x=2 -r y=0
+'
+	]
+);
+if ($opt->help) {
+	print  $usage->text;
+	exit;
+}
+ if ($opt->version) {
+ 	show_version();
+ 	exit;
+ }
+if ( $opt->{dump} ) {
+	print Dumper $opt;
+	exit;
+}
+
+# read command line
+process_options();
+
+# collect arguments for R function call
+my @RArgs;
+
+# run read count extractions, if requested
+if ( $opt->{extract} ) {
+	my $amplcions = rel2abs( $opt->{amplicons} ) || die "Unable to open amplicon file for read counting ($opt->{amplicons})";
+	for my $type (qw<sample reference>) {
+		if ( $opt->{$type}{'map'} and -r $opt->{$type}{'map'} ) {
+			my $abs_input = rel2abs( $opt->{$type}{'map'} ) || die "Unable to open mapfile for $type ($opt->{$type}{'map'})";
+			my $output = $abs_input;
+			$output =~ s/[sb]am$/counts/;
+
+			#my $counts = File::Temp->new( SUFFIX => '.counts', TEMPDIR => 1, UNLINK => 0 );
+			$opt->{ex}{output} = $output;
+			my $params = join( " ", map { sprintf "--%s '%s'", $_, $opt->{ex}{$_} } keys %{$opt->{ex}} );
+			my $cmd = join( " ", $opt->{counter}, '--mapfile', $abs_input, '--amplicons', $opt->{amplicons}, $params );
+			if ( $opt->{verbose} ) {
+				print join(
+					"\n",
+					"## === RUNNING THE FOLLOWING READ COUNTING ===",    # head
+					$cmd,                                                # body
+					'## === END ===',                                    # foot
+					''                                                   # extra blank line
+				);
+			} ## end if ( $opt->{verbose} )
+			system($cmd);
+			$opt->{$type}{data} = $output;
+		} ## end if ( $opt->{$type}{'map'} and...)
+		else {
+			die "Missing mapfile for $type ($opt->{$type}{'map'})";
+		}
+	} ## end for my $type (qw<sample reference>)
+} ## end if ( $opt->{extract} )
+
+# run clustering, if requested
+for my $type (qw<sample reference>) {
+	if ( $opt->{$type}{data} and -r $opt->{$type}{data} ) {
+		my $abs_input = rel2abs( $opt->{$type}{data} );
+		my $cluster = File::Temp->new( SUFFIX => '.clustered', TEMPDIR => 1, UNLINK => 0 );
+		if ( $opt->{cluster} ) {
+			my $cp = join( " ", map { sprintf "--%s '%s'", $_, $opt->{cp}{$_} } keys %{$opt->{cp}} );
+			my $iteration = 1;
+			while ( -e $abs_input . '.' . $iteration ) { $iteration++; }
+			my $cmd = join( " ", $opt->{engine}, '--input', $abs_input, $cp, ">", $abs_input . '.' . $iteration );
+			if ( $opt->{verbose} ) {
+				print join(
+					"\n",
+					"## === RUNNING THE FOLLOWING CLUSTERING ===",    # head
+					$cmd,                                             # body
+					'## === END ===',                                 # foot
+					''                                                # extra blank line
+				);
+			} ## end if ( $opt->{verbose} )
+			system($cmd );
+			push @RArgs, arg( $type, $abs_input . '.' . $iteration, 1, 1, 1 );
+		} ## end if ( $opt->{cluster} )
+		else {
+			push @RArgs, arg( $type, $abs_input, 1, 1, 1 );
+		}
+	} ## end if ( $opt->{$type}{data} and...)
+	else {
+		warn( "\nERROR: The input data file for $type is not readable!\n\n", $usage->text );
+		exit;
+	}
+	push @RArgs, arg( $type . '.x', $opt->{$type}{x} ) if defined $opt->{$type}{x};
+	push @RArgs, arg( $type . '.y', $opt->{$type}{y} ) if defined $opt->{$type}{y};
+} ## end for my $type (qw<sample reference>)
+if ( $opt->{basename} eq '<generate>' ) {
+	my $generated = join( '_', $opt->{sample}{name}, 'vs', $opt->{reference}{name} );
+	$generated =~ s/\W//gsm;
+	$generated =~ s/_+/_/gsm;
+	push @RArgs, arg( 'output.basename', $generated, 1 );
+}
+else {
+	push @RArgs, arg( 'output.basename', $opt->{basename}, 1 );
+}
+push @RArgs, arg( 'output.dir', $opt->{destdir}, 1, 1, 1 );
+
+# join to get acutal code block
+my $RCode;
+if ( $opt->{source} ne '' ) {
+	$opt->{inject} =~ s/;/\n/gsm;
+	$RCode = join( "\n",
+		'require(quandico)', 'source("' . $opt->{source} . '")',
+		$opt->{inject}, 'quandico(', join( ",\n", @RArgs ), ")\nq()\n" );
+}
+else {
+	$RCode = join( "\n", 'library(quandico)', 'quandico(', join( ",\n", @RArgs ), ")\nq()\n" );
+}
+if ( $opt->{verbose} ) {
+	print join(
+		"\n",
+		"## === RUNNING THE FOLLOWING CODE IN R ===",    # head
+		$RCode,                                          # body
+		'## === END ===',                                # foot
+		''                                               # extra blank line
+	);
+} ## end if ( $opt->{verbose} )
+
+# save the code to a temp file
+my $fh = File::Temp->new( SUFFIX => '.R', UNLINK => 0, TEMPDIR => 1 );
+print $fh $RCode;
+close $fh;
+
+# run R and use the temp file as input
+system( $opt->{rexe}, '--vanilla', '--slave', '-f', $fh->filename );
+unlink $fh;
+
+# done
+exit;
+
+# subs from here:
+sub arg {
+	my $param = shift;
+	my $value = shift;
+	my $quote = shift || 0;
+	my $path  = shift || 0;
+	my $forr  = shift || 0;
+	$value = rel2abs($value)      if $path and not $forr;
+	$value = abs_path($value)     if $forr;
+	$value = q'"' . $value . q'"' if $quote;
+	return sprintf "\t%-30s = %s", $param, $value;
+} ## end sub arg
+
+sub process_options {
+
+	# set some defaults if these are mising
+	$opt->{global}{title}   = "quandico"  unless $opt->{global}{title};
+	$opt->{sample}{name}    = "sample"    unless $opt->{sample}{name};
+	$opt->{reference}{name} = "reference" unless $opt->{reference}{name};
+	if ( $opt->{sample}{'map'} and $opt->{reference}{'map'} ) {
+		$opt->{extract} = 1;
+		if ( not $opt->{amplicons} ) {
+			warn "\nExtraction of read counts from SAM/BAM requires an amplicon file (BED)\n";
+			print $usage->text;
+			exit;
+		}
+	} ## end if ( $opt->{sample}{'map'} ...)
+} ## end sub process_options

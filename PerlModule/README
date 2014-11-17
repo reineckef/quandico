@@ -1,0 +1,60 @@
+QUANDICO
+
+This is a wrapper package to install helper scripts 
+around the R application 'quandico'.
+
+INSTALLATION
+
+To install this module, you have several options.
+
+Unzip and untar the archive, cd into the directory and run:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+Or, if you are on Windows and using Strawberry Perl, you need to run:
+
+	perl Makefile.PL
+	dmake
+	dmake test
+	dmake install
+
+A convenient way is to use 'cpanm' from App::cpanminus, where the verbose
+mode is highly recommended to see progress and comments:
+
+   cpanm -v QUANDICO-v[m.n].tar.gz
+
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc QUANDICO
+
+You can also look for information at:
+
+    Google Code
+        http://code.google.com/p/quandico
+
+
+LICENSE AND COPYRIGHT
+
+Copyright (C) 2014 Frank Reinecke
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 3 dated June, 2007 or at your option
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+A copy of the GNU General Public License is available in the source tree;
+if not, write to the Free Software Foundation, Inc.,
+59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+

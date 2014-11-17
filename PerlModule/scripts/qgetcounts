@@ -1,0 +1,184 @@
+#!/usr/bin/perl -w
+use strict;
+use QUANDICO;
+use version 0.77;
+
+# constants
+use constant PAIRED     => 0x1;
+use constant PROPERLY   => 0x2;
+use constant UNMAPPED   => 0x4;
+use constant MATENOTM   => 0x8;
+use constant REVERSE    => 0x10;
+use constant FIRST      => 0x40;
+use constant SECOND     => 0x80;
+use constant SPLIT      => 0x100;
+use constant FAILED     => 0x200;
+use constant DUPLICATE  => 0x400;
+use constant SUPPLEMENT => 0x800;
+
+# Getopt::Long::Descriptive - input parameters
+my ( $opt, $usage ) = describe_options(
+	'qgetcounts %o <options>',
+	['
+  input file and global options:'
+	],
+	['mapfile|i=s',   'input (BAM or SAM) with mapped reads'],
+	['amplicons|a=s', 'amplicon coordinates (BED format)'],
+	['
+  output files:'
+	],
+	['output|o=s', 'name for output file'],
+	['
+  detailed settings:'
+	],
+	['properly!',   'require reads to be properly paired [off]',                  {default => 0}],
+	['minmapq=i',   'minimal mapping quality to count (0=off) [5]',               {default => 5}],
+	['minmapped=f', 'minimal fraction (0-1) or bases (>1) mapped per read [0.5]', {default => 0.5}],
+	['primerlen=i', 'avg length of primers already clipped [25]',                 {default => 25}],
+	['tolerance=i', 'number of bases to tolerate around ends [10]',               {default => 10}],
+	['primary!',    'only use primary mappings [on]',                             {default => 1}],
+	['
+  external tools:'
+	],
+	['samtools=s', 'path to samtools executable [samtools]', {default => 'samtools'}],
+	['
+  standard options:'
+	],
+	['verbose|v+', 'control verbosity, multiple levels [1]', {default => 1}],
+	['version|V', "show the version ($QUANDICO::VERSION) and exit"],
+	['dump|D',     "dump all options and exit"],
+	['quiet|q',   'suppress all output except errors [off]', {implies => {verbose => 0}}],
+	['help|h',    'show this help screen'],
+	['
+
+# usage with demo data (available from http://code.google.com/p/quandico)
+qgetcounts -i M62_NA13019.bam -a CNA902Y.bed
+'
+	]
+);
+print( $usage->text, 1 ), exit if $opt->help;
+if ( $opt->version ) {
+	my $name = $0;
+	$name =~ s!^\.\/!!;
+	printf "This is %s %s\nUse flags -h or --help for help.\n", $name, $QUANDICO::VERSION->stringify;
+	exit;
+}
+if ( not $opt->mapfile or not $opt->amplicons ) {
+	print STDERR "Options --mapfile BAMFILE and --amplicons BEDFILE are mandatory!\n\n";
+	print( $usage->text, 0 );
+	exit;
+}
+
+# choose basename to match input, without extension
+if ( not $opt->{output} ) {
+	$opt->{output} = $opt->{mapfile};
+	$opt->{output} =~ s/[sb]am$/tsv/gsim;
+}
+if ( $opt->{dump} ) {
+	print Dumper $opt;
+	exit;
+}
+
+# convert sam to bam
+if ( $opt->{mapfile} =~ /\.sam$/i ) {
+	print "# Creating the BAM file because input $opt->{mapfile} is in SAM format...\n";
+	my $bam = $opt->{mapfile};
+	$bam =~ s/sam$/bam/i;
+	my $make_index = sprintf qq~%s view -L %s -uS %s | %s sort - > %s~,    #
+	$opt->{samtools},                                                      # samtools
+	$opt->{amplicons},                                                     # BED
+	$opt->{mapfile},                                                       # SAM
+	$opt->{samtools},                                                      # samtools
+	$bam;                                                                  # final output
+	my $made = `$make_index`;
+	print $made, "\n";
+	$opt->{mapfile} = $bam;
+} ## end if ( $opt->{mapfile} =~ /\.sam$/i)
+
+# check for existance of an index
+my $index = $opt->{mapfile} . '.bai';
+if ( not -e $index ) {
+	print "# Creating the BAM index as the file '$index' is not there...\n";
+	my $make_index = sprintf qq~%s index %s~, $opt->{samtools}, $opt->{mapfile};
+	my $made = `$make_index`;
+	print $made, "\n";
+}
+
+# preset common options for samtools calls
+my $properly = $opt->{properly} ? '-F 8 -f 2 ' : '';
+$opt->{cmd} = sprintf qq~%s view %s%s~, $opt->{samtools}, $properly, $opt->{mapfile};
+$opt->{po} = $opt->{primerlen} + $opt->{tolerance};
+
+# open results file for writing
+open my $writer, '>', $opt->{output};
+
+# open bed file
+open my $bed, '<', $opt->{amplicons};
+
+# parse all bed regions (lines)
+while ( my $region = <$bed> ) {
+	print "# region: ", $region if $opt->{verbose} > 1;
+	chomp($region);
+	my @BED = split( /\t/, $region );
+	my ( $left, $right ) = ( $BED[1] - $opt->{primerlen}, $BED[2] + $opt->{primerlen} );
+	my @Counts = get_counts( $opt->{cmd} . ( sprintf " %s:%d-%d", $BED[0], $left, $right ), $left, $right );
+	my $name = $BED[3] || 'NONAME';
+	my $gene = $BED[5] || 'NOGENE';
+	print $writer    # save to file
+	join( "\t", $BED[0], $BED[1], 0, 'N', $name, $Counts[0], $gene ), "\n",    # left count
+	join( "\t", $BED[0], $BED[2], 1, 'N', $name, $Counts[1], $gene ), "\n";    # right count
+
+	if ( $opt->{verbose} ) {
+		print                                                                  # print to console
+		join( "\t", $BED[0], $BED[1], 0, 'N', $name, $Counts[0], $gene ), "\n",    # left count
+		join( "\t", $BED[0], $BED[2], 1, 'N', $name, $Counts[1], $gene ), "\n";    # right count
+	}
+} ## end while ( my $region = <$bed> )
+close $writer;
+exit;
+
+# get_counts
+sub get_counts {
+	my $cmd   = shift;                                                             # command to run (samtools)
+	my $left  = shift;
+	my $right = shift;
+	my @Min   = ( [$left, $left + $opt->{po}], [$right - $opt->{po}, $right] );
+	my @Count = ( 0, 0 );
+	if ( $opt->{verbose} > 1 ) {
+		print $cmd, "\n";
+	}
+	open my $reader, '-|', $cmd;
+	READ: while ( my $line = <$reader> ) {
+		my @SAM = split( /\t/, $line );
+		if ( $opt->{primary} ) {
+			next READ if $SAM[4] & SUPPLEMENT;
+		}
+		next READ unless $SAM[4] >= $opt->{minmapq};
+		if ( $opt->{minmapped} > 0 ) {
+			my $mapped = 0;
+			while ( $SAM[5] =~ /(\d+)M/gsm ) {
+				$mapped += $1;
+			}
+			if ( $opt->{minmapped} > 0 ) {
+				if ( $opt->{minmapped} <= 1 ) {
+					next READ if $mapped / length( $SAM[9] ) < $opt->{minmapped};
+				}
+				else {
+					next READ if $mapped < $opt->{minmapped};
+				}
+			} ## end if ( $opt->{minmapped} > 0 )
+		} ## end if ( $opt->{minmapped} > 0 )
+		my $dir = 0;
+		if ( $SAM[1] & REVERSE ) {
+			$dir = 1;
+			$SAM[5] =~ s/\d+S$//;
+			while ( $SAM[5] =~ /(\d+)[MDS]/gsm ) {
+				$SAM[3] += $1;
+			}
+		}
+		next READ if $SAM[3] < $Min[$dir]->[0];
+		next READ if $SAM[3] > $Min[$dir]->[1];
+		$Count[$dir]++;
+	} ## end READ: while ( my $line = <$reader> )
+	return @Count;
+} ## end sub get_counts
