@@ -5,10 +5,21 @@ use version 0.77;
 
 =head1 NAME
 
-qcluster - Cluster counts by coordinates to form groups for quandico
+QUANDICO - Package with helper scripts for the R application 'quandico'
+
+=head1 VERSION
+
+Version 1.12
+
+=cut
 
 =head1 SYNOPSIS
 
+The is a script to cluster coordinates. 
+
+	# help is available:
+   qcluster --help
+   
    # use counts contained in 'my_regions.tsv' and write to 'clustered.tsv'
    qcluster -i my_regions.tsv > clustered.tsv
 
@@ -84,7 +95,7 @@ my ( $opt, $usage ) = describe_options(
 	   gunzip refGene.txt.gz
 	    
 	2. Add this option: '--names refGene.txt'    when calling this script directly, or:
-	3. Add this option: '--cp names=refGene.txt' when calling this through quandico.pl
+	3. Add this option: '--cp names=refGene.txt' when calling this through quandico
 	"
 	]
 );
@@ -568,3 +579,56 @@ sub name_columns {
 		'name'  => $opt->{annot}
 	);
 } ## end sub name_columns
+
+=head1 AUTHOR
+
+Frank Reinecke, C<< <frank.reinecke at qiagen.com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<frank.reinecke at qiagen.com>, 
+or through the website at L<https://github.com/fr02081975/quandico>. 
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc QUANDICO
+
+
+You can also look for information at:
+
+=over 4
+
+=item * GitHub (report bugs there)
+
+L<https://github.com/fr02081975/quandico>
+
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2014 Frank Reinecke.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 3 dated June, 2007 or at your option
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+A copy of the GNU General Public License is available in the source tree;
+if not, write to the Free Software Foundation, Inc.,
+59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+=cut

@@ -120,8 +120,8 @@ Frank Reinecke, C<< <frank.reinecke at qiagen.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<frank.reinecke at qiage.com>, 
-or through the website at L<http://code.google.com/p/quandico>. 
+Please report any bugs or feature requests to C<frank.reinecke at qiagen.com>, 
+or through the website at L<https://github.com/fr02081975/quandico>. 
 
 
 =head1 SUPPORT
@@ -135,9 +135,10 @@ You can also look for information at:
 
 =over 4
 
-=item * Goodle Code (report bugs there)
+=item * GitHub (report bugs there)
 
-L<http://code.google.com/p/quandico>
+L<https://github.com/fr02081975/quandico>
+
 
 =back
 

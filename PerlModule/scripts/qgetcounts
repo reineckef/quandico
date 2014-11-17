@@ -1,20 +1,31 @@
 #!/usr/bin/perl -w
 use strict;
-use QUANDICO;
+use QUANDICO qw<:DEFAULT :FLAGS>;
 use version 0.77;
 
-# constants
-use constant PAIRED     => 0x1;
-use constant PROPERLY   => 0x2;
-use constant UNMAPPED   => 0x4;
-use constant MATENOTM   => 0x8;
-use constant REVERSE    => 0x10;
-use constant FIRST      => 0x40;
-use constant SECOND     => 0x80;
-use constant SPLIT      => 0x100;
-use constant FAILED     => 0x200;
-use constant DUPLICATE  => 0x400;
-use constant SUPPLEMENT => 0x800;
+=head1 NAME
+
+QUANDICO - Package with helper scripts for the R application 'quandico'
+
+=head1 VERSION
+
+Version 1.12
+
+=cut
+
+=head1 SYNOPSIS
+
+The is a script to extract amplicon read counts from mapped reads (SAM/BAM). 
+
+	# help is available:
+   qgetcounts --help
+   
+   # usage with demo data from <http://github.com/fr02081975/quandico/Data>
+   qgetcounts -i M062_NA13019.bam -a CNA902Y.bed
+   qgetcounts -i M062_NA12878.bam -a CNA902Y.bed
+   
+
+=cut
 
 # Getopt::Long::Descriptive - input parameters
 my ( $opt, $usage ) = describe_options(
@@ -51,10 +62,12 @@ my ( $opt, $usage ) = describe_options(
 	['help|h',    'show this help screen'],
 	['
 
-# usage with demo data (available from http://code.google.com/p/quandico)
-qgetcounts -i M62_NA13019.bam -a CNA902Y.bed
+# usage with demo data (available from <http://github.com/fr02081975/quandico/Data>)
+qgetcounts -i M062_NA13019.bam -a CNA902Y.bed
+qgetcounts -i M062_NA12878.bam -a CNA902Y.bed
+
 '
-	]
+]
 );
 print( $usage->text, 1 ), exit if $opt->help;
 if ( $opt->version ) {
@@ -182,3 +195,56 @@ sub get_counts {
 	} ## end READ: while ( my $line = <$reader> )
 	return @Count;
 } ## end sub get_counts
+
+=head1 AUTHOR
+
+Frank Reinecke, C<< <frank.reinecke at qiagen.com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<frank.reinecke at qiagen.com>, 
+or through the website at L<https://github.com/fr02081975/quandico>. 
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc QUANDICO
+
+
+You can also look for information at:
+
+=over 4
+
+=item * GitHub (report bugs there)
+
+L<https://github.com/fr02081975/quandico>
+
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2014 Frank Reinecke.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 3 dated June, 2007 or at your option
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+A copy of the GNU General Public License is available in the source tree;
+if not, write to the Free Software Foundation, Inc.,
+59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+=cut
