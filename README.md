@@ -21,81 +21,86 @@ driver script `quandico`. Step 3 alone can be performed inside R.
 
 ### Requirements
 Running `quandico` requires `R` with some commonly available packages from [CRAN](http://cran.r-project.org). 
-These should be installed automatically when installing the package (listed dependencies).
+Please visit [The `R`-project hompage](http://www.r-project.org) for advice how to install `R` on your system.
+Dependencies for `quandico` should be installed automatically when installing the package.
 
 Accessory applications such as a command-line driver script (_quandico_), the script to extract counts of 
-mapped reads (_qgetcounts_) and the region clustering script (_qcluster_) require Perl and some common modules 
-from [CPAN](http://www.cpan.org). All dependencies should automatically be installed. 
+mapped reads (_qgetcounts_) and the region clustering script (_qcluster_) require Perl. Perl is already installed on 
+most Linux systems, please check [Perl.org](http://www.perl.org) for details. If you are using Windows we 
+recommend [Strawberry Perl](http://www.strawberryperl.com). All dependencies should automatically be installed 
+from [CPAN](http://www.cpan.org).
 
 ### Installation
- 1. Install R. Please visit [The `R`-project hompage](http://www.r-project.org) for advice.
- 2. Download and install the packaged `R` code of `quandico` (version n.m)
 
-`$ R CMD INSTALL quandico_[n.m].tar.gz`
+The string *n.m* will be used for the version number (major.minor) of `quandico`. This was *1.12* by the time of writing.
 
-**Optional**
+ * Download and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
 
- 3. Install Perl (only if not already installed, most Linux systems ship with Perl, check [Perl.org](http://www.perl.org) on Windows we recommend [Strawberry Perl](http://www.strawberryperl.com).
- 4. Download and install the Perl module `QUANDICO` that also contains the two helper script and the main driver (version n.m):
-  4.1 Download the package
-  4.2 Unzip and untar (will create its own folder)
-  4.3 Install using make (Linux, Unix) or dmake (Strawberry Perl on Windows)
+`$ R CMD INSTALL path/to/quandico_n.m.tar.gz`
+
+**_optional_ but _recommended_**
+
+ * Download and install the Perl module `QUANDICO` (file `QUANDICO-vn.m.tar.gz`) using `make` on Linux, and `dmake` on Windows:
 
 ```
-$ cd QUANDICO-[n.m]
-$ perl Makefile.PL
+$ tar xvfz QUANDICO-vn.m.tar.gz
+$ cd QUANDICO-vn.m
 $ [d]make
 $ [d]make test
 $ [d]make install
 ```
 
-Alternatively, you can use `cpanm` from `App::cpanminus` to install to module
-directly from the downloaded archive. We recommend to use `--verbose` mode:
+Alternatively, you can use `cpanm` from `App::cpanminus` to install to module directly from the downloaded archive. 
+We recommend to use `--verbose` mode:
 	
-`$ cpanm --verbose QUANDICO-[n.m].tar.gz`
+`$ cpanm --verbose path/to/QUANDICO-vn.m.tar.gz`
 
- 5. To start from mapped reads in SAM/BAM format, the Perl script qgetcounts will call `samtools` (version 1.1 or later) 
- to extract the counts. Therefore, `samtools` needs to be installed, please visit [Samtools](http://www.htslib.org) for advice.
+To start from mapped reads in SAM/BAM format, the Perl script qgetcounts will call `samtools` (version 1.1 or later) to 
+extract the counts. Therefore, `samtools` needs to be installed, please visit [Samtools](http://www.htslib.org) for advice.
 
 ### Running
-The Perl command-line tools present a help and usage information when run without arguments (or by explicitly using `-h` 
-or `--help`). The R function provides help (after installation) by doing:
+The directory 'Data' contains two BAM files and one BED file as demo data. 
 
-```R
-library(quandico)
-?quandico
-```
+ * Download demo data
 
-The directory 'Data' contains two BAM files and one BED file as demo data. You can 
-run all steps separately:
+You can run all steps separately:
 
 ```
 # extract counts
-$ qgetcounts -i M62_NA13019.bam -a CNA902Y.bed -o M62_NA13019.counts
-$ qgetcounts -i M62_NA12878.bam -a CNA902Y.bed -o M62_NA12878.counts
+$ qgetcounts -i path/to/M62_NA13019.bam -a path/to/CNA902Y.bed -o path/to/M62_NA13019.counts
+$ qgetcounts -i path/to/M62_NA12878.bam -a path/to/CNA902Y.bed -o path/to/M62_NA12878.counts
 
 # cluster the counts
-$ qcluster -i M62_NA13019.counts [--names refGene.txt] > M62_NA13019.clustered
-$ qcluster -i M62_NA12878.counts [--names refGene.txt] > M62_NA12878.clustered
+$ qcluster -i path/to/M62_NA13019.counts [--names path/to/refGene.txt] > path/to/M62_NA13019.clustered
+$ qcluster -i path/to/M62_NA12878.counts [--names path/to/refGene.txt] > path/to/M62_NA12878.clustered
 
 # call copy numbers
 $ quandico --no-cluster \
-   --sample    data=M62_NA13019.clustered \   # path to file with clustered counts
-   --reference data=M62_NA12878.clustered \   # path to file with clustered counts
-   -s x=2 -s y=0 -r x=2 -r y=0 \              # sample (s) and reference (r) are female
+   -s data=path/to/M62_NA13019.clustered \   # file with clustered counts
+   -r data=path/to/M62_NA12878.clustered \   # file with clustered counts
+   -s x=2 -s y=0 -r x=2 -r y=0           \   # sample (-s) and reference (-r) are female
+   [--cp names=path/to/refGene.txt]          # optional for naming of clusters
 ```
 
 Alternatively, all this can be done using one single command:
 
 ```
-$ quandico -s map=M62_NA13019.bam -s x=2 -s y=0 \
-           -r map=M62_NA12878.bam -r x=2 -r y=0 \
+$ quandico -s map=path/to/M62_NA13019.bam -s x=2 -s y=0 \
+           -r map=path/to/M62_NA12878.bam -r x=2 -r y=0 \
            --dir results --basename 13019_vs_12878 \
-           [--cp names=refGene.txt]
+           [--cp names=path/to/refGene.txt]
 ```
 
 ### Help
-All three scripts have several detailed options, please check the output of `<script> --help` for details.
+The Perl command-line tools present a help and usage information when run without arguments (or by explicitly using `-h` 
+or `--help`).
+
+The R function provides help (after installation) by doing:
+
+```R
+library(quandico)
+?quandico
+```
 
 ### Issues
 Please report bugs to the author [Frank Reinecke](mailto:frank.reinecke@qiagen.com) or file 
