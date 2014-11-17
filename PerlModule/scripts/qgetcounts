@@ -21,8 +21,8 @@ The is a script to extract amplicon read counts from mapped reads (SAM/BAM).
    qgetcounts --help
    
    # usage with demo data from <http://github.com/fr02081975/quandico/Data>
-   qgetcounts -i M062_NA13019.bam -a CNA902Y.bed
-   qgetcounts -i M062_NA12878.bam -a CNA902Y.bed
+   qgetcounts -i M62_NA13019.bam -a CNA902Y.bed
+   qgetcounts -i M62_NA12878.bam -a CNA902Y.bed
    
 
 =cut
@@ -63,8 +63,8 @@ my ( $opt, $usage ) = describe_options(
 	['
 
 # usage with demo data (available from <http://github.com/fr02081975/quandico/Data>)
-qgetcounts -i M062_NA13019.bam -a CNA902Y.bed
-qgetcounts -i M062_NA12878.bam -a CNA902Y.bed
+qgetcounts -i M62_NA13019.bam -a CNA902Y.bed
+qgetcounts -i M62_NA12878.bam -a CNA902Y.bed
 
 '
 ]

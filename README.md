@@ -12,27 +12,27 @@ The main script is written in `R` and there are two helper scripts and one main 
 
 ### Workflow
 0. PCR-enrichment of target regions, sequencing and read-mapping (SAM/BAM file)
-1. Extract counts for every PCR amplicon (_qgetcounts_)
-2. Cluster read-counts into regions (_qcluster_)
-3. Compare counts per cluster and perform CNV calling (_quandico_)
+1. Extract counts for every PCR amplicon (`qgetcounts`)
+2. Cluster read-counts into regions (`qcluster`)
+3. Compare counts per cluster and perform CNV calling (`quandico`)
 
 Steps 1, 2 and 3 can be performed with one single command line call of the Perl 
 driver script `quandico`. Step 3 alone can be performed inside R.
 
 ### Requirements
 Running `quandico` requires `R` with some commonly available packages from [CRAN](http://cran.r-project.org). 
-Please visit [The `R`-project hompage](http://www.r-project.org) for advice how to install `R` on your system.
+Please visit [The `R`-project homepage](http://www.r-project.org) for advice how to install `R` on your system.
 Dependencies for `quandico` should be installed automatically when installing the package.
 
-Accessory applications such as a command-line driver script (_quandico_), the script to extract counts of 
-mapped reads (_qgetcounts_) and the region clustering script (_qcluster_) require Perl. Perl is already installed on 
+Accessory applications such as a command-line driver script (`quandico`), the script to extract counts of 
+mapped reads (_qgetcounts_) and the region clustering script (`qcluster`) require Perl. Perl is already installed on 
 most Linux systems, please check [Perl.org](http://www.perl.org) for details. If you are using Windows we 
 recommend [Strawberry Perl](http://www.strawberryperl.com). All dependencies should automatically be installed 
 from [CPAN](http://www.cpan.org).
 
 ### Installation
 
-The string *n.m* will be used for the version number (major.minor) of `quandico`. This was *1.12* by the time of writing.
+The string *n.m* will be used for the version number (major.minor) of `quandico`. This was **1.12** by the time of writing.
 
  * Download and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
 
@@ -55,7 +55,7 @@ We recommend to use `--verbose` mode:
 	
 `$ cpanm --verbose path/to/QUANDICO-vn.m.tar.gz`
 
-To start from mapped reads in SAM/BAM format, the Perl script qgetcounts will call `samtools` (version 1.1 or later) to 
+To start from mapped reads in SAM/BAM format, the Perl script `qgetcounts` will call `samtools` (version 1.1 or later) to 
 extract the counts. Therefore, `samtools` needs to be installed, please visit [Samtools](http://www.htslib.org) for advice.
 
 ### Running
