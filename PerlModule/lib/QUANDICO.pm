@@ -17,12 +17,27 @@ use Getopt::Long::Descriptive;
 use List::Util qw<min max>;
 use Sort::Naturally qw<nsort>;
 use version 0.77;
-our $VERSION = version->declare(1.12);    ## GIT_VERSION ## our $VERSION = version->declare(<%>);
-our $BRANCH  = 'master';                   ## GIT_BRANCH ## our $BRANCH = '<%>';
+our $VERSION = version->declare(v1.12); ## GIT_VERSION ## our $VERSION = version->declare(<%>);
+our $BRANCH = 'master'; ## GIT_BRANCH ## our $BRANCH = '<%>';
 #
-use Exporter;
+require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw<describe_options fileparse copy move rel2abs catfile min max nsort Dumper $CWD show_version abs_path PATH>; # symbols to export always
+our @EXPORT = qw< describe_options fileparse copy move rel2abs catfile min max nsort Dumper $CWD show_version abs_path PATH >; # symbols to export always
+our @EXPORT_OK = qw< PAIRED PROPERLY UNMAPPED MATENOTM REVERSE FIRST SECOND SPLIT FAILED DUPLICATE SUPPLEMENT >;
+our %EXPORT_TAGS = ( FLAGS => [qw< PAIRED PROPERLY UNMAPPED MATENOTM REVERSE FIRST SECOND SPLIT FAILED DUPLICATE SUPPLEMENT >]);
+
+# constants
+use constant PAIRED     => 0x1;
+use constant PROPERLY   => 0x2;
+use constant UNMAPPED   => 0x4;
+use constant MATENOTM   => 0x8;
+use constant REVERSE    => 0x10;
+use constant FIRST      => 0x40;
+use constant SECOND     => 0x80;
+use constant SPLIT      => 0x100;
+use constant FAILED     => 0x200;
+use constant DUPLICATE  => 0x400;
+use constant SUPPLEMENT => 0x800;
 
 =head1 NAME
 
@@ -59,6 +74,12 @@ driver which is also able to run the other two helper script for you.
 
 Some functions of commonly used external modules are exported to the helper scripts. 
 Please check the code if you need to know the details.
+
+SAM flags can be exported by request:
+
+  use QUANDICO qw<:FLAGS>;
+  
+
 
 =head1 SUBROUTINES/METHODS
 
@@ -146,3 +167,4 @@ if not, write to the Free Software Foundation, Inc.,
 =cut
 
 1; # End of QUANDICO
+
