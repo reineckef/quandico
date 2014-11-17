@@ -3,8 +3,6 @@ lib/QUANDICO.pm
 LICENSE
 Makefile.PL
 MANIFEST
-MYMETA.json
-MYMETA.yml
 README
 scripts/qcluster
 scripts/qgetcounts
