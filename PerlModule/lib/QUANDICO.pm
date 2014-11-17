@@ -17,14 +17,8 @@ use Getopt::Long::Descriptive;
 use List::Util qw<min max>;
 use Sort::Naturally qw<nsort>;
 use version 0.77;
-our $VERSION = version->declare(v1.12); ## GIT_VERSION ## our $VERSION = version->declare(<%>);
-our $BRANCH = 'master'; ## GIT_BRANCH ## our $BRANCH = '<%>';
-#
-require Exporter;
-our @ISA = qw(Exporter);
-our @EXPORT = qw< describe_options fileparse copy move rel2abs catfile min max nsort Dumper $CWD show_version abs_path PATH >; # symbols to export always
-our @EXPORT_OK = qw< PAIRED PROPERLY UNMAPPED MATENOTM REVERSE FIRST SECOND SPLIT FAILED DUPLICATE SUPPLEMENT >;
-our %EXPORT_TAGS = ( FLAGS => [qw< PAIRED PROPERLY UNMAPPED MATENOTM REVERSE FIRST SECOND SPLIT FAILED DUPLICATE SUPPLEMENT >]);
+our $VERSION = version->declare(v1.12);    ## GIT_VERSION ## our $VERSION = version->declare(<%>);
+our $BRANCH  = 'master';                   ## GIT_BRANCH ## our $BRANCH = '<%>';
 
 # constants
 use constant PAIRED     => 0x1;
@@ -38,6 +32,26 @@ use constant SPLIT      => 0x100;
 use constant FAILED     => 0x200;
 use constant DUPLICATE  => 0x400;
 use constant SUPPLEMENT => 0x800;
+
+# exporting
+require Exporter;
+our @ISA    = qw(Exporter);
+our @EXPORT = qw<
+describe_options
+fileparse copy move rel2abs catfile
+min max nsort
+Dumper
+$CWD abs_path PATH
+show_version
+>;    # symbols to export always
+our @EXPORT_OK = qw<PAIRED PROPERLY UNMAPPED MATENOTM REVERSE
+FIRST SECOND SPLIT FAILED DUPLICATE SUPPLEMENT>;
+our %EXPORT_TAGS = (
+	FLAGS => [
+		qw<PAIRED PROPERLY UNMAPPED MATENOTM REVERSE FIRST
+		SECOND SPLIT FAILED DUPLICATE SUPPLEMENT >
+	]
+);
 
 =head1 NAME
 
@@ -100,7 +114,6 @@ sub show_version {
 	exit;
 }
 
-
 =head2 abs_path() 
 
 This will create an absolute path via rel2abs(), but always uses slashes and never 
@@ -109,7 +122,7 @@ backslash, even on Windows. The path is meant to be used inside R.
 =cut
 
 sub abs_path {
-	my $abs = rel2abs( shift );
+	my $abs = rel2abs(shift);
 	$abs =~ tr/\\/\//;
 	return $abs;
 }
@@ -167,5 +180,4 @@ if not, write to the Free Software Foundation, Inc.,
 
 =cut
 
-1; # End of QUANDICO
-
+1;    # End of QUANDICO
