@@ -37,13 +37,14 @@ from [CPAN][cpan].
 
 The string *n.m* will be used for the version number (major.minor) of `quandico`. This was **1.12** by the time of writing.
 
- * Download and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
+ * Download [the latest release](/releases/latest) and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
 
 `$ R CMD INSTALL path/to/quandico_n.m.tar.gz`
 
 **_optional_ but _recommended_**
 
- * Download and install the Perl module `QUANDICO` (file `QUANDICO-vn.m.tar.gz`) using `make` on Linux, and `dmake` on Windows:
+ * Download [the latest release](/releases/latest) and install the Perl module `QUANDICO` (file `QUANDICO-vn.m.tar.gz`) 
+ using `make` on Linux, and `dmake` on Windows:
 
 ```bash
 $ tar xvfz QUANDICO-vn.m.tar.gz
