@@ -37,13 +37,13 @@ from [CPAN][cpan].
 
 The string *n.m* will be used for the version number (major.minor) of `quandico`. This was **1.12** by the time of writing.
 
- * Download [the latest release](/releases/latest) and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
+ * Download [the latest release][latest] and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
 
 `$ R CMD INSTALL path/to/quandico_n.m.tar.gz`
 
 **_optional_ but _recommended_**
 
- * Download [the latest release](/releases/latest) and install the Perl module `QUANDICO` (file `QUANDICO-vn.m.tar.gz`) 
+ * Download [the latest release][latest] and install the Perl module `QUANDICO` (file `QUANDICO-vn.m.tar.gz`) 
  using `make` on Linux, and `dmake` on Windows:
 
 ```bash
@@ -155,6 +155,7 @@ them on quandico's home [on GitHub](http://github.com/reineckef/quandico).
 [cnv]: http://en.wikipedia.org/wiki/Copy-number_variation "Copy Number Variation (Wikipedia)"
 [cpan]: http://www.cpan.org "Comprehensive Perl Archive Network"
 [cran]: http://cran.r-project.org "CRAN: Comprehensive R Archive Network"
+[latest]: https://github.com/reineckef/quandico/releases/latest "the latest release"
 [me]: mailto:frank.reinecke@qiagen.com
 [perl]: http://www.perl.org "Perl Homepage"
 [r]: http://www.r-project.org "R Project"
