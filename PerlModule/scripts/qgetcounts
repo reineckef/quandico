@@ -9,7 +9,7 @@ QUANDICO - Package with helper scripts for the R application 'quandico'
 
 =head1 VERSION
 
-Version 1.12
+Version 1.13
 
 =cut
 
@@ -20,7 +20,7 @@ The is a script to extract amplicon read counts from mapped reads (SAM/BAM).
 	# help is available:
    qgetcounts --help
    
-   # usage with demo data from <http://github.com/reineckef/quandico/Data>
+   # usage with demo data from <https://drive.google.com/open?id=0BzLnl09R3GITLUxralM0cjI1UDg&authuser=0>
    qgetcounts -i M62_NA13019.bam -a CNA902Y.bed
    qgetcounts -i M62_NA12878.bam -a CNA902Y.bed
    
@@ -36,17 +36,13 @@ my ( $opt, $usage ) = describe_options(
 	['mapfile|i=s',   'input (BAM or SAM) with mapped reads'],
 	['amplicons|a=s', 'amplicon coordinates (BED format)'],
 	['
-  output files:'
-	],
-	['output|o=s', 'name for output file'],
-	['
   detailed settings:'
 	],
 	['properly!',   'require reads to be properly paired [off]',                  {default => 0}],
-	['minmapq=i',   'minimal mapping quality to count (0=off) [5]',               {default => 5}],
-	['minmapped=f', 'minimal fraction (0-1) or bases (>1) mapped per read [0.5]', {default => 0.5}],
-	['primerlen=i', 'avg length of primers already clipped [25]',                 {default => 25}],
-	['tolerance=i', 'number of bases to tolerate around ends [10]',               {default => 10}],
+	['minmapq=i',   'minimal mapping quality to count (0=off) [0]',               {default => 0}],
+	['minmapped=f', 'minimal fraction (0-1) or bases (>1) mapped per read [0.3]', {default => 0.3}],
+	['primerlen=i', 'avg length of primers already clipped [23]',                 {default => 23}],
+	['tolerance=i', 'number of bases to tolerate around ends [12]',               {default => 12}],
 	['primary!',    'only use primary mappings [on]',                             {default => 1}],
 	['
   external tools:'
@@ -63,8 +59,8 @@ my ( $opt, $usage ) = describe_options(
 	['
 
 # usage with demo data (available from <http://github.com/reineckef/quandico/Data>)
-qgetcounts -i M62_NA13019.bam -a CNA902Y.bed
-qgetcounts -i M62_NA12878.bam -a CNA902Y.bed
+qgetcounts -i M62_NA13019.bam -a CNA902Y.bed > M62_NA13019.counts
+qgetcounts -i M62_NA12878.bam -a CNA902Y.bed > M62_NA12878.counts
 
 '
 ]
@@ -82,11 +78,6 @@ if ( not $opt->mapfile or not $opt->amplicons ) {
 	exit;
 }
 
-# choose basename to match input, without extension
-if ( not $opt->{output} ) {
-	$opt->{output} = $opt->{mapfile};
-	$opt->{output} =~ s/[sb]am$/tsv/gsim;
-}
 if ( $opt->{dump} ) {
 	print Dumper $opt;
 	exit;
@@ -104,17 +95,17 @@ if ( $opt->{mapfile} =~ /\.sam$/i ) {
 	$opt->{samtools},                                                      # samtools
 	$bam;                                                                  # final output
 	my $made = `$make_index`;
-	print $made, "\n";
+	print STDERR $made, "\n" unless $opt->{quiet};
 	$opt->{mapfile} = $bam;
 } ## end if ( $opt->{mapfile} =~ /\.sam$/i)
 
 # check for existance of an index
 my $index = $opt->{mapfile} . '.bai';
 if ( not -e $index ) {
-	print "# Creating the BAM index as the file '$index' is not there...\n";
+	print STDERR "# Creating the BAM index as the file '$index' is not there...\n" unless $opt->{quiet};
 	my $make_index = sprintf qq~%s index %s~, $opt->{samtools}, $opt->{mapfile};
 	my $made = `$make_index`;
-	print $made, "\n";
+	print STDERR $made, "\n"  unless $opt->{quiet};
 }
 
 # preset common options for samtools calls
@@ -122,11 +113,8 @@ my $properly = $opt->{properly} ? '-F 8 -f 2 ' : '';
 $opt->{cmd} = sprintf qq~%s view %s%s~, $opt->{samtools}, $properly, $opt->{mapfile};
 $opt->{po} = $opt->{primerlen} + $opt->{tolerance};
 
-# open results file for writing
-open my $writer, '>', $opt->{output};
-
 # open bed file
-open my $bed, '<', $opt->{amplicons};
+open my $bed, '<', $opt->{amplicons} || die "Unable to open amplicon file for reading: $opt->{amplicons}";
 
 # parse all bed regions (lines)
 while ( my $region = <$bed> ) {
@@ -137,17 +125,16 @@ while ( my $region = <$bed> ) {
 	my @Counts = get_counts( $opt->{cmd} . ( sprintf " %s:%d-%d", $BED[0], $left, $right ), $left, $right );
 	my $name = $BED[3] || 'NONAME';
 	my $gene = $BED[5] || 'NOGENE';
-	print $writer    # save to file
+	print     # save to file
 	join( "\t", $BED[0], $BED[1], 0, 'N', $name, $Counts[0], $gene ), "\n",    # left count
 	join( "\t", $BED[0], $BED[2], 1, 'N', $name, $Counts[1], $gene ), "\n";    # right count
 
-	if ( $opt->{verbose} ) {
+	if ( $opt->{verbose} > 2 ) {
 		print                                                                  # print to console
 		join( "\t", $BED[0], $BED[1], 0, 'N', $name, $Counts[0], $gene ), "\n",    # left count
 		join( "\t", $BED[0], $BED[2], 1, 'N', $name, $Counts[1], $gene ), "\n";    # right count
 	}
 } ## end while ( my $region = <$bed> )
-close $writer;
 exit;
 
 # get_counts
@@ -160,7 +147,7 @@ sub get_counts {
 	if ( $opt->{verbose} > 1 ) {
 		print $cmd, "\n";
 	}
-	open my $reader, '-|', $cmd;
+	open my $reader, '-|', $cmd || die "Unable to open samtools pipe: $cmd";
 	READ: while ( my $line = <$reader> ) {
 		my @SAM = split( /\t/, $line );
 		if ( $opt->{primary} ) {

@@ -9,7 +9,7 @@ QUANDICO - Package with helper scripts for the R application 'quandico'
 
 =head1 VERSION
 
-Version 1.12
+Version 1.13
 
 =cut
 
@@ -396,7 +396,7 @@ RUN: for my $run ( 'dry', 'wet' ) {
 } ## end RUN: for my $run ( 'dry', 'wet' )
 if ( $opt->{verbose} ) {
 	foreach my $KND (qw<OLD NEW>) {
-		open my $statfile, '>', $KND . '_stats.tsv';
+		open my $statfile, '>', $KND . '_stats.tsv' || die "Unable to open file for statistics (verbose mode only)";
 		select $statfile;
 
 		#print $KND, "\n", '=' x length($KND), "\n";
@@ -447,7 +447,7 @@ INSERT INTO primers	(chr, pos, dir, base, orgname, count)
 VALUES          	(?,   ?,   ?,   ?,    ?,       ?)
 SQL
 	);
-	open my $reader, '<', $opt->{input};
+	open my $reader, '<', $opt->{input} || die "Unable to open input file: $opt->{input}";
 	my $sep     = $opt->{sep};
 	my $exc     = $opt->{exclude} ne '' ? $opt->{exclude} : 0;
 	my @Columns = ( map { $opt->{$_} } qw<chrcol poscol dircol bascol namcol cntcol> );
@@ -467,7 +467,9 @@ SQL
 # sub read_namefile - this will fill the internal database with annotations
 sub read_namefile {
 	my $dbh = shift;
-	open my $reader, '<', $opt->{names};
+	return $dbh if $opt->{names} eq '';
+	return $dbh unless -e $opt->{names};
+	open my $reader, '<', $opt->{names} || die "Unable to open names file: $opt->{names}";
 	return unless ref $reader;
 	my %Columns = name_columns();
 	my @Columns = sort { $a <=> $b } values %Columns;
@@ -556,7 +558,7 @@ sub name_columns {
 	# preset for refGene files
 	if ( $opt->{type} =~ /refg/ ) {
 		$opt->{nmchr}   = 2;
-		$opt->{nmbegin} = 6;
+		$opt->{nmbegin} = 4;
 		$opt->{nmend}   = 7;
 		$opt->{annot}   = 12;
 		$opt->{match}   = 'NM_';

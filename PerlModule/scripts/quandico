@@ -9,7 +9,7 @@ QUANDICO - Package with helper scripts for the R application 'quandico'
 
 =head1 VERSION
 
-Version 1.12
+Version 1.13
 
 =cut
 
@@ -61,7 +61,7 @@ my ( $opt, $usage ) = describe_options(
   R specific:'
 	],
 	['rexe|x=s', 'R executable',                 {default => 'R'}],
-	['source=s', 'use current source (not package)', { default => undef }    ],
+	['source=s', 'use current source (not package)', { default => '' }    ],
 	['inject=s', 'inject R code before quandico (used with "source")', {requires => 'source' }],
 	['
   standard options:'
@@ -107,9 +107,9 @@ if ( $opt->{extract} ) {
 			$output =~ s/[sb]am$/counts/;
 
 			#my $counts = File::Temp->new( SUFFIX => '.counts', TEMPDIR => 1, UNLINK => 0 );
-			$opt->{ex}{output} = $output;
+			# $opt->{ex}{output} = $output;
 			my $params = join( " ", map { sprintf "--%s '%s'", $_, $opt->{ex}{$_} } keys %{$opt->{ex}} );
-			my $cmd = join( " ", $opt->{counter}, '--mapfile', $abs_input, '--amplicons', $opt->{amplicons}, $params );
+			my $cmd = join( " ", $opt->{counter}, '--mapfile', $abs_input, '--amplicons', $opt->{amplicons}, $params, '>', $output );
 			if ( $opt->{verbose} ) {
 				print join(
 					"\n",
@@ -147,13 +147,13 @@ for my $type (qw<sample reference>) {
 					''                                                # extra blank line
 				);
 			} ## end if ( $opt->{verbose} )
-			system($cmd );
+			system($cmd);
 			push @RArgs, arg( $type, $abs_input . '.' . $iteration, 1, 1, 1 );
 		} ## end if ( $opt->{cluster} )
 		else {
 			push @RArgs, arg( $type, $abs_input, 1, 1, 1 );
 		}
-	} ## end if ( $opt->{$type}{data} and...)
+	} ## end if ( $opt->{$type}{data} and ...)
 	else {
 		warn( "\nERROR: The input data file for $type is not readable!\n\n", $usage->text );
 		exit;
@@ -161,6 +161,7 @@ for my $type (qw<sample reference>) {
 	push @RArgs, arg( $type . '.x', $opt->{$type}{x} ) if defined $opt->{$type}{x};
 	push @RArgs, arg( $type . '.y', $opt->{$type}{y} ) if defined $opt->{$type}{y};
 } ## end for my $type (qw<sample reference>)
+
 if ( $opt->{basename} eq '<generate>' ) {
 	my $generated = join( '_', $opt->{sample}{name}, 'vs', $opt->{reference}{name} );
 	$generated =~ s/\W//gsm;
@@ -171,6 +172,9 @@ else {
 	push @RArgs, arg( 'output.basename', $opt->{basename}, 1 );
 }
 push @RArgs, arg( 'output.dir', $opt->{destdir}, 1, 1, 1 );
+
+# create the output directory if needed
+mkdir($opt->{destdir}) unless  -d $opt->{destdir};
 
 # join to get acutal code block
 my $RCode;
