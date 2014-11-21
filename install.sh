@@ -16,13 +16,13 @@
 #
 # *** CONFIGURATION *** // START
 #
-REXE=/usr/bin/R;        # point to the R installation to use
-PERL=/usr/bin/perl;     # point to the Perl installation to use
-BIGDATA=0;              # set to 1 if you would like to download BAM files (~474 MB)
-REFGENE=0;              # set to 0 if you would like to skip refGene.txt download (~15 MB)
-TESTRUN=1;              # set to 0 if you would like to skip the test of 'quandico'
-CPANM=0;                # set to 1 if you prefer App::cpanminus over classic 'make'
-SAMTOOLS=~/bin/samtools # specify which samtools to use (must be >= version 1.1)
+REXE=R;           # point to the R installation to use
+PERL=perl;        # point to the Perl installation to use
+BIGDATA=0;        # set to 1 if you would like to download BAM files (~474 MB)
+REFGENE=1;        # set to 0 if you would like to skip refGene.txt download (~15 MB)
+TESTRUN=1;        # set to 0 if you would like to skip the test of 'quandico'
+CPANM=0;          # set to 1 if you prefer App::cpanminus over classic 'make'
+SAMTOOLS=samtools # specify which samtools to use (must be >= version 1.1)
 #
 # *** CONFIGURATION *** // END
 ###############################################################################
