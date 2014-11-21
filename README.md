@@ -35,11 +35,39 @@ from [CPAN][cpan].
 
 ## Installation
 
+### Fast
+
+Download the [`install.sh`][installer] shell script for Unix/Linux. 
+Check the configuration in the first section of that script, adjust 
+parameters and then start it in a clean directory, e.g.:
+
+```bash
+$ mkdir quandico
+$ cd quandico
+$ wget https://github.com/reineckef/quandico/raw/master/install.sh
+$ ./install.sh
+```
+
+This is not well tested and may fail on various systems for various 
+reasons.
+
+### Detailed
+
+Install these `R` packages, either by using `R> install.packages('name')` inside an `R` session 
+or by running the install command from a command line: `$ R CMD INSTALL 'name'`:
+
+ * MASS
+ * ggplot2
+ * grid
+ * gridExtra
+ * naturalsort
+ * scales
+
 The string *n.m* will be used for the version number (major.minor) of `quandico`. This was **1.12** by the time of writing.
 
  * Download [the latest release][latest] and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
 
-`$ R CMD INSTALL path/to/quandico_n.m.tar.gz`
+`$ R CMD INSTALL quandico_n.m.tar.gz`
 
 **_optional_ but _recommended_**
 
@@ -49,15 +77,16 @@ The string *n.m* will be used for the version number (major.minor) of `quandico`
 ```bash
 $ tar xvfz QUANDICO-vn.m.tar.gz
 $ cd QUANDICO-vn.m
+$ perl Makefile.PL
 $ [d]make
 $ [d]make test
-$ [d]make install
+$ [d]make install # run this as sudo/root for system install
 ```
 
 Alternatively, you can use `cpanm` from `App::cpanminus` to install to module directly from the downloaded archive. 
 We recommend to use `--verbose` mode:
 	
-`$ cpanm --verbose path/to/QUANDICO-vn.m.tar.gz`
+`$ cpanm --verbose QUANDICO-vn.m.tar.gz` # run this as sudo/root for system install
 
 To start from mapped reads in SAM/BAM format, the Perl script `qgetcounts` will call `samtools` (version 1.1 or later) to 
 extract the counts. Therefore, `samtools` needs to be installed, please visit [Samtools][samtools] for advice.
@@ -65,16 +94,31 @@ extract the counts. Therefore, `samtools` needs to be installed, please visit [S
 ## Example Data
 
 Example data files to test the tools are available on Google drive. To start from mapped reads (in SAM or BAM files, please 
-note that this step additionally requires **samtools** version >= 1.1), you need to download:
+note that this step additionally requires **samtools** version >= 1.1).
 
 * [CNA902Y.bed](https://drive.google.com/open?id=0BzLnl09R3GITQjBUZUFVcy1BNFk&authuser=0) amplicon coordinates
 * [M62_NA13019.bam](https://drive.google.com/open?id=0BzLnl09R3GITMzNyakhveTh3UVE&authuser=0) example case (sample) **:warning: 252 MB !**
 * [M62_NA12878.bam](https://drive.google.com/open?id=0BzLnl09R3GITSnU1TlVRSjRXRHM&authuser=0) example control (reference) **:warning: 222 MB !**
 
+Please note, these files can also be downloaded using wget (sometimes these links do not work, for unclear reason):
+
+```bash
+$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITQjBUZUFVcy1BNFk -O CNA902Y.bed
+$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITMzNyakhveTh3UVE -O M62_NA13019.bam
+$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITSnU1TlVRSjRXRHM -O M62_NA12878.bam
+```
+
 To skip count extraction and start with clustering, the extracted counts of these samples are also available:
 
 * [M62_NA13019.tsv](https://drive.google.com/open?id=0BzLnl09R3GITUDZ0aXFBd2pDR0k&authuser=0) control counts (sample)
 * [M62_NA12878.tsv](https://drive.google.com/open?id=0BzLnl09R3GITWU9xTndtZE5iOEE&authuser=0) control counts (reference)
+
+Please note, these files can also be downloaded using wget (sometimes these links do not work, for unclear reason):
+
+```bash
+$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITUDZ0aXFBd2pDR0k -O M62_NA13019.tsv
+$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITWU9xTndtZE5iOEE -O M62_NA12878.tsv
+```
 
 A file with gene names and coordinates is required if clusters should be named using gene names. For human assemblies GRCh37 
 (hg19) and GRCh38 (hg38), these file can be downloaded from [UCSC](http://hgdownload.soe.ucsc.edu/downloads.html):
@@ -87,35 +131,42 @@ Clustered count files ready for processing with the final step are these:
 * [M62_NA13019.clustered](https://drive.google.com/open?id=0BzLnl09R3GITYTduNDY4azJNZXM&authuser=0) 
 * [M62_NA12878.clustered](https://drive.google.com/open?id=0BzLnl09R3GITWm1FS0duczVlejQ&authuser=0)
 
+Please note, these files can also be downloaded using wget (sometimes these links do not work, for unclear reason):
+
+```bash
+$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITYTduNDY4azJNZXM -O M62_NA13019.clustered
+$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITWm1FS0duczVlejQ -O M62_NA12878.clustered
+```
+
 ## Running
 
 You can run all steps separately:
 
 ```bash
 # extract counts
-$ qgetcounts -i path/to/M62_NA13019.bam -a path/to/CNA902Y.bed -o path/to/M62_NA13019.tsv
-$ qgetcounts -i path/to/M62_NA12878.bam -a path/to/CNA902Y.bed -o path/to/M62_NA12878.tsv
+$ qgetcounts -i M62_NA13019.bam -a CNA902Y.bed > M62_NA13019.tsv
+$ qgetcounts -i M62_NA12878.bam -a CNA902Y.bed > M62_NA12878.tsv
 
 # cluster the counts
-$ qcluster -i path/to/M62_NA13019.tsv [--names path/to/refGene.txt] > path/to/M62_NA13019.clustered
-$ qcluster -i path/to/M62_NA12878.tsv [--names path/to/refGene.txt] > path/to/M62_NA12878.clustered
+$ qcluster -i M62_NA13019.tsv [--names refGene.txt] > M62_NA13019.clustered
+$ qcluster -i M62_NA12878.tsv [--names refGene.txt] > M62_NA12878.clustered
 
 # call copy numbers
 $ quandico --no-cluster \
-   -s data=path/to/M62_NA13019.clustered \   # file with clustered counts
-   -r data=path/to/M62_NA12878.clustered \   # file with clustered counts
-   -s x=2 -s y=0 -r x=2 -r y=0           \   # sample (-s) and reference (-r) are female
-   [--cp names=path/to/refGene.txt]          # optional for naming of clusters
+   -s data=M62_NA13019.clustered \   # file with clustered counts
+   -r data=M62_NA12878.clustered \   # file with clustered counts
+   -s x=2 -s y=0 -r x=2 -r y=0   \   # sample (-s) and reference (-r) are female
+   [--cp names=refGene.txt]          # optional for naming of clusters
 ```
 
 Alternatively, all this can be done using one single command:
 
 ```bash
-$ quandico -s map=path/to/M62_NA13019.bam -s x=2 -s y=0 \ # sample
-           -r map=path/to/M62_NA12878.bam -r x=2 -r y=0 \ # reference
-           -a /path/to/CNA902Y.bed                      \ # amplicons
-           --dir results --basename 13019_vs_12878      \ # output location and name
-           [--cp names=path/to/refGene.txt]               # optional cluster names
+$ quandico -s map=M62_NA13019.bam -s x=2 -s y=0 \ # sample
+           -r map=M62_NA12878.bam -r x=2 -r y=0 \ # reference
+           -a /CNA902Y.bed                      \ # amplicons
+           -d results -b 13019_vs_12878         \ # output location and name
+           [--cp names=refGene.txt]               # optional cluster names
 ```
 
 ## Example Output
@@ -141,8 +192,8 @@ or `--help`).
 The `R` function provides help (after installation) by doing:
 
 ```R
-library(quandico)
-?quandico
+R> library(quandico)
+R> ?quandico
 ```
 
 ## Issues
@@ -162,4 +213,4 @@ them on quandico's home [on GitHub](http://github.com/reineckef/quandico).
 [samtools]: http://www.htslib.org "Samtools Homepage"
 [strawberry]: http://www.strawberryperl.com "Strawberry Perl"
 [vcf]: https://github.com/samtools/hts-specs "VCF Specifications"
-
+[installer]: https://github.com/reineckef/quandico/raw/master/install.sh "install script"
