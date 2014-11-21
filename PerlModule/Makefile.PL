@@ -1,14 +1,14 @@
 use 5.008;
 use strict;
 use warnings;
-use ExtUtils::MakeMaker 6.64;
+use ExtUtils::MakeMaker;
 WriteMakefile(
 	NAME          => 'QUANDICO',
 	AUTHOR        => q{Frank Reinecke <frank.reinecke@qiagen.com>},
 	VERSION_FROM  => 'lib/QUANDICO.pm',
 	ABSTRACT_FROM => 'lib/QUANDICO.pm',
 	LICENSE       => 'gpl',
-	EXE_FILES => ['scripts/quandico', 'scripts/qcluster', 'scripts/qgetcounts'],
+	EXE_FILES     => ['scripts/quandico', 'scripts/qcluster', 'scripts/qgetcounts'],
 
 	#	PL_FILES  => {},
 	PREREQ_PM => {
@@ -28,12 +28,10 @@ WriteMakefile(
 		'List::Util'                => 1.380000,
 		'List::MoreUtils'           => 0,
 		'Sort::Naturally'           => 1.020000,
-		'version'                   => 0.770000
-	},
-	TEST_REQUIRES => {
-		'Term::ANSIColor' => 2.000000,
-		'Test::More'      => 0,
-		'Test::Script'    => 1
+		'version'                   => 0.770000,
+		'Term::ANSIColor'           => 2.000000,
+		'Test::More'                => 0,
+		'Test::Script'              => 1
 	},
 	dist  => {COMPRESS => 'gzip -9f', SUFFIX => 'gz'},
 	clean => {FILES    => 'QUANDICO-*'},
