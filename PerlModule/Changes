@@ -1,3 +1,113 @@
+commit 96a0ae4a96b7eb39276545812759f9db2e632e85
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Fri Nov 21 16:45:32 2014 +0100
+
+    Added a description of install.sh to README, a lot of clean-up (removed
+    /path/to in examples).
+
+ 2 files changed, 212 insertions(+), 79 deletions(-)
+
+commit 0c5e774231b9068038b18f310f4517a2980a0788
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Fri Nov 21 16:38:11 2014 +0100
+
+    Set version in R to 1.13 to match the Perl package version
+
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 2e499c0554dc99530c96c8fe50fe6452fdf051b2
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Fri Nov 21 16:37:49 2014 +0100
+
+    Removed testing dependencies (all required now), no high MakeMaker
+    version needed any more.
+
+ 1 files changed, 6 insertions(+), 8 deletions(-)
+
+commit 43dd4fd61f0876537de41379a55daaf4f94f0edd
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Fri Nov 21 16:37:14 2014 +0100
+
+    Changed output to always appear on STDOUT, so upstream tool usage is
+    consistently "$ tool -arg > output.file"; increased version to 1.13
+
+ 4 files changed, 33 insertions(+), 40 deletions(-)
+
+commit aa64a4fbec274443a55c4c2ce82f031cfb16c1e7
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Thu Nov 20 19:23:03 2014 +0100
+
+    Added 'install.sh' as a one-stop script to download and install
+    everything.
+
+ 1 files changed, 149 insertions(+), 0 deletions(-)
+
+commit 128e7484dab1e43b039b28d9938ba76f52aa62a6
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Tue Nov 18 15:08:29 2014 +0100
+
+    Fixed link to latest release
+
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 63aca966b74c95b1aba6468b2f2bb28863ae84e8
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Tue Nov 18 15:05:50 2014 +0100
+
+    Added link to /releases/latest to download packages
+
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 32327c062a5fe1ff7d301d41548c4af1c97146b2
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Tue Nov 18 14:46:24 2014 +0100
+
+    Added more documentations, many links and an example image
+
+ 2 files changed, 93 insertions(+), 38 deletions(-)
+
+commit ac86e8cbe9646cfbba91ea19aee56f9a32fd5200
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Tue Nov 18 14:26:52 2014 +0100
+
+    Added ExampleOutput folder and content to show results from the
+    demonstration run documented in README
+
+ 4 files changed, 130 insertions(+), 0 deletions(-)
+
+commit ca10ee8a9e9f00cbd35d6144c95bde278a7b704e
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Tue Nov 18 11:52:18 2014 +0100
+
+    Added count data files and the corresponding amplicon coordinates (bed)
+    in /Data
+
+ 3 files changed, 8915 insertions(+), 0 deletions(-)
+
+commit 834b3f6986a43bc2bcbe03005fbe550a01465560
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Mon Nov 17 17:24:47 2014 +0100
+
+    Updated links
+
+ 5 files changed, 10 insertions(+), 10 deletions(-)
+
+commit 8316affb7b472dfcc94146830a1c9daa064221bb
+Author: fr02081975 <mail@frank-reinecke.de>
+Date:   Mon Nov 17 17:18:36 2014 +0100
+
+    Added both packages of version 1.12
+
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e284b220c27044c82ab56072af25f7209822f6f4
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 17 16:39:50 2014 +0100
+
+    Set master version to 1.12
+
+ 1 files changed, 65 insertions(+), 0 deletions(-)
+
 commit 6b6c3cfe9f57793bddc49aa4d63b078030a84b3b
 Author: Frank Reinecke <frank.reinecke@qiagen.com>
 Date:   Mon Nov 17 16:39:39 2014 +0100
