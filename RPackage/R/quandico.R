@@ -19,7 +19,7 @@ config.default.reference.y <- 0 # default reference to be female
 ##
 ## internal
 config.software.name       <- 'quandico'
-config.software.version    <- '1.13'
+config.software.version    <- '1.13'  ##  GIT_VERSION ## config.software.version    <- '<%>'
 
 ## reference assembly
 config.assembly.filename   <- NA
