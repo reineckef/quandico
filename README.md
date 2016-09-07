@@ -63,7 +63,7 @@ or by running the install command from a command line: `$ R CMD INSTALL 'name'`:
  * naturalsort
  * scales
 
-The string *n.m* will be used for the version number (major.minor) of `quandico`. This was **1.13** by the time of writing.
+The string *n.m* will be used for the version number (major.minor) of `quandico`. This was **1.14** by the time of writing.
 
  * Download [the latest release][latest] and install the packaged `R` code of `quandico` (file `quandico_n.m.tar.gz`):
 
