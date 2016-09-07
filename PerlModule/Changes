@@ -1,3 +1,43 @@
+commit 17c02d450c4908defbac44118713597d5acb3493
+Merge: 636468a 9156bcc
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Wed Sep 7 15:51:57 2016 +0200
+
+    Merge branch 'develop'
+
+commit 9156bcc240e2cf3168c3a127889f30c850f6f85a
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Wed Sep 7 15:46:46 2016 +0200
+
+    Updated version in DESCRIPTION and generated documentation files
+
+ 6 files changed, 11 insertions(+), 7 deletions(-)
+
+commit ee017a286036b0b0f1859fd6db6a9707de8704aa
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Wed Sep 7 15:43:02 2016 +0200
+
+    Changed theme definitions to work with recent ggplot2 versions (tested
+    with 2.1.0)
+
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 7ea7d9d0e770db06c436343fc9a0e0bde23127c4
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Wed Sep 7 15:35:13 2016 +0200
+
+    Updated branch/version to v1.14 for PerlModule/lib/QUANDICO.pm
+
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit a3e4269488770f9697c61a1b0f8954c444ee77f1
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Wed Sep 7 15:35:09 2016 +0200
+
+    Set develop version to v1.14
+
+ 3 files changed, 55 insertions(+), 0 deletions(-)
+
 commit 636468aeeabfeba533684863182ab7b010828f53
 Author: reineckef <mail@frank-reinecke.de>
 Date:   Wed Nov 26 08:50:09 2014 +0100
