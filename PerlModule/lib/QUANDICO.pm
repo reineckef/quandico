@@ -18,7 +18,7 @@ use List::Util qw<min max>;
 use Sort::Naturally qw<nsort>;
 use version 0.77;
 our $VERSION = version->declare(v1.14); ## GIT_VERSION ## our $VERSION = version->declare(<%>);
-our $BRANCH = 'develop'; ## GIT_BRANCH ## our $BRANCH = '<%>';
+our $BRANCH = 'master'; ## GIT_BRANCH ## our $BRANCH = '<%>';
 
 # constants
 use constant PAIRED     => 0x1;
@@ -181,5 +181,6 @@ if not, write to the Free Software Foundation, Inc.,
 =cut
 
 1;    # End of QUANDICO
+
 
 
