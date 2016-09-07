@@ -8,7 +8,7 @@ read counts from next generation sequencing (NGS) performed after PCR-enrichment
 set of genes with known or expected relevance for the sample, e.g. genes that play a role in cancer. Counts from a normal 
 control (ideally matched normal from the same individual, e.g. healthy tissue) are required. 
 
-A detailed description of the method is submitted for publication.
+A detailed description can be found in the publication of this tool: **Quantitative analysis of differences in copy numbers using read depth obtained from PCR-enriched samples and controls**: [BMC Bioinformatics 2015, 16:17](http://www.biomedcentral.com/1471-2105/16/17 "BMC Bioinformatics"). 
 
 ## Implementation
 The main script is written in `R` and there are two helper scripts and one main driver script written in Perl.
