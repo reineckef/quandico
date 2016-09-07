@@ -1,3 +1,58 @@
+commit 636468aeeabfeba533684863182ab7b010828f53
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Wed Nov 26 08:50:09 2014 +0100
+
+    Added comment line to automatically increment version number by a script
+
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 5b049b7cfebbcb6e4fd71caa9a99feef59708eef
+Merge: 54fb66c 2c3ed04
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Mon Nov 24 18:20:21 2014 +0100
+
+    Merge branch 'master' of github.com:reineckef/quandico
+
+commit 2c3ed04a89c234a61986f6e9575b3a1259088cbd
+Author: Frank Reinecke <frank.reinecke@qiagen.com>
+Date:   Mon Nov 24 18:31:01 2014 +0100
+
+    Fixed some typos in example code
+
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 54fb66c16f12c53b341bcc807e79be6334a98cd5
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Mon Nov 24 15:42:14 2014 +0100
+
+    Use which to set default executables in install.sh
+
+ 1 files changed, 10 insertions(+), 7 deletions(-)
+
+commit 80aa62cf7f6508defafff6d311a56bd3df3c8485
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Mon Nov 24 15:39:26 2014 +0100
+
+    Version change to 1.13 in documentation
+
+ 5 files changed, 8 insertions(+), 8 deletions(-)
+
+commit c0bf042dcfc58a6acd7a476c97cd347c7902c9a8
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Fri Nov 21 16:51:59 2014 +0100
+
+    Set defaults to be more neutral, added 1.13 to README.md
+
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+commit f56a74501e795da38d4b044e976bee91e9247b18
+Author: reineckef <mail@frank-reinecke.de>
+Date:   Fri Nov 21 16:46:09 2014 +0100
+
+    Set master version to 1.13
+
+ 1 files changed, 110 insertions(+), 0 deletions(-)
+
 commit 96a0ae4a96b7eb39276545812759f9db2e632e85
 Author: reineckef <mail@frank-reinecke.de>
 Date:   Fri Nov 21 16:45:32 2014 +0100
