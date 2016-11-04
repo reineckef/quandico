@@ -164,7 +164,7 @@ Alternatively, all this can be done using one single command:
 ```bash
 $ quandico -s map=M62_NA13019.bam -s x=2 -s y=0 \ # sample
            -r map=M62_NA12878.bam -r x=2 -r y=0 \ # reference
-           -a CNA902Y.bed                       \ # amplicons
+           -A CNA902Y.bed                       \ # amplicons
            -d results -b 13019_vs_12878         \ # output location and name
            [--cp names=refGene.txt]               # optional cluster names
 ```
