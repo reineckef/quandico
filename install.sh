@@ -183,7 +183,7 @@ action "[ STEP  5  ] Installing Perl Module '$PERLM' ... "
 
 if [ $CPANM == 1 ]; then
   echo "Installing Perl Module '$PURE' using cpanm (App::cpanminus) ..."
-  cpan App::cpanminus && cpanm -v $PERLM
+  cpan App::cpanminus && cpanm --installdeps $PERLM && cpanm -v $PERLM
   echo "OK."
   echo ""
 else
