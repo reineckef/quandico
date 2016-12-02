@@ -51,6 +51,16 @@ $ sh install.sh
 This is not well tested and may fail on various systems for various 
 reasons.
 
+#### Hint for Ubuntu (maybe others)
+
+If you are running Ubuntu linux, it is recommended to install Perl dependencies 
+from repositories like so:
+
+```bash
+sudo apt-get install libenv-path-perl libgetopt-long-descriptive-perl libdatetime-perl libtest-script-perl
+```
+Thanks to @biocyberman #3 for this fix.
+
 ### Detailed
 
 Install these `R` packages, either by using `R> install.packages('name')` inside an `R` session 
