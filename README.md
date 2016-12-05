@@ -110,12 +110,12 @@ note that this step additionally requires **samtools** version >= 1.1).
 * [M62_NA13019.bam](https://drive.google.com/open?id=0BzLnl09R3GITMzNyakhveTh3UVE&authuser=0) example case (sample) **:warning: 252 MB !**
 * [M62_NA12878.bam](https://drive.google.com/open?id=0BzLnl09R3GITSnU1TlVRSjRXRHM&authuser=0) example control (reference) **:warning: 222 MB !**
 
-Please note, these files can also be downloaded using wget (sometimes these links do not work, for unclear reason):
+Please note, these files can also be downloaded using wget (below). **Warning** Google fails to provide the file if no virus check can be done, which seems to be the case for the BAM files. You need to accept that on a per-click basis, so only via the web-browser, not `wget`:
 
 ```bash
-$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITQjBUZUFVcy1BNFk -O CNA902Y.bed
-$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITMzNyakhveTh3UVE -O M62_NA13019.bam
-$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITSnU1TlVRSjRXRHM -O M62_NA12878.bam
+$ wget --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITQjBUZUFVcy1BNFk" -O CNA902Y.bed
+$ # fails: wget --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITMzNyakhveTh3UVE" -O M62_NA13019.bam
+$ # fails: wget --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITSnU1TlVRSjRXRHM" -O M62_NA12878.bam
 ```
 
 To skip count extraction and start with clustering, the extracted counts of these samples are also available:
@@ -126,8 +126,8 @@ To skip count extraction and start with clustering, the extracted counts of thes
 Please note, these files can also be downloaded using wget (sometimes these links do not work, for unclear reason):
 
 ```bash
-$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITUDZ0aXFBd2pDR0k -O M62_NA13019.tsv
-$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITWU9xTndtZE5iOEE -O M62_NA12878.tsv
+$ wget --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITUDZ0aXFBd2pDR0k" -O M62_NA13019.tsv
+$ wget --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITWU9xTndtZE5iOEE" -O M62_NA12878.tsv
 ```
 
 A file with gene names and coordinates is required if clusters should be named using gene names. For human assemblies GRCh37 
@@ -144,8 +144,8 @@ Clustered count files ready for processing with the final step are these:
 Please note, these files can also be downloaded using wget (sometimes these links do not work, for unclear reason):
 
 ```bash
-$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITYTduNDY4azJNZXM -O M62_NA13019.clustered
-$ wget --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITWm1FS0duczVlejQ -O M62_NA12878.clustered
+$ wget --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITYTduNDY4azJNZXM" -O M62_NA13019.clustered
+$ wget --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITWm1FS0duczVlejQ" -O M62_NA12878.clustered
 ```
 
 ## Running
