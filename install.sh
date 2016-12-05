@@ -113,16 +113,17 @@ action "[ STEP  2b ] Downloading the Perl module: $PERLM ... "
 wget -nc -nv --no-check-certificate https://github.com/reineckef/quandico/$PERLM
 
 action "[ STEP  2c ] Downloading example data ... "
-wget -nc -nv --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITQjBUZUFVcy1BNFk -O CNA902Y.bed
-wget -nc -nv --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITUDZ0aXFBd2pDR0k -O M62_NA13019.tsv
-wget -nc -nv --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITWU9xTndtZE5iOEE -O M62_NA12878.tsv
-wget -nc -nv --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITYTduNDY4azJNZXM -O M62_NA13019.clustered
-wget -nc -nv --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITWm1FS0duczVlejQ -O M62_NA12878.clustered
+wget -nc -nv --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITQjBUZUFVcy1BNFk" -O CNA902Y.bed
+wget -nc -nv --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITUDZ0aXFBd2pDR0k" -O M62_NA13019.tsv
+wget -nc -nv --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITWU9xTndtZE5iOEE" -O M62_NA12878.tsv
+wget -nc -nv --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITYTduNDY4azJNZXM" -O M62_NA13019.clustered
+wget -nc -nv --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITWm1FS0duczVlejQ" -O M62_NA12878.clustered
 
 if [ $BIGDATA == 1 ]; then
   action "[ STEP  2d ] Downloading BAM files (474 MB), please wait ... "
-  wget -nc -nv --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITMzNyakhveTh3UVE -O M62_NA13019.bam
-  wget -nc -nv --no-check-certificate https://googledrive.com/host/0BzLnl09R3GITSnU1TlVRSjRXRHM -O M62_NA12878.bam
+  # wget -nc -nv --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITMzNyakhveTh3UVE" -O M62_NA13019.bam
+  # wget -nc -nv --no-check-certificate "https://drive.google.com/uc?export=download&id=0BzLnl09R3GITSnU1TlVRSjRXRHM" -O M62_NA12878.bam
+  bad "BAM file download from Google Drive currently fails using wget. Please use a browser"
 else
   skip "[ STEP  2d ] Skipping BAM files "
 fi
