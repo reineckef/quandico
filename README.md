@@ -209,9 +209,10 @@ R> ?quandico
 ```
 
 ## Issues
-Please report bugs to the author [Frank Reinecke][me] or file 
-them on quandico's home [on GitHub](http://github.com/reineckef/quandico).
+Please report bugs by opening a new issued here [on GitHub](http://github.com/reineckef/quandico).
 
+## Author Contact
+Fot other inquiries (no bug reports, please) you can [Frank Reinecke][send a message to me].
 
 <!-- REFERENCES -->
 
