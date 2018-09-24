@@ -1,6 +1,6 @@
-[![DOI](https://img.shields.io/badge/DOI-10.1186%2Fs12859--014--0428--5-lightgrey.svg?style=flat-square)](https://doi.org/10.1186/s12859-014-0428-5)
-
 # quandico
+
+[![DOI](https://img.shields.io/badge/DOI-10.1186%2Fs12859--014--0428--5-lightgrey.svg?style=flat-square)](https://doi.org/10.1186/s12859-014-0428-5)
 
 ### Abstract
 
